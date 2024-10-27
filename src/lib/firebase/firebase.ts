@@ -62,33 +62,6 @@ export async function getPlayersOrderedByRank(): Promise<Player[]> {
         return [];
     }
 }
-export async function getPlayerStats(): Promise<Player[]> {
-    const playersCollection = collection(db, '/organizations/S0m6M4GFVpxmd2H3NwoE/players');
-    const q = query(playersCollection, orderBy('rank', 'asc'));
 
-    try {
-        const querySnapshot = await getDocs(q);
-        console.log("Fetched players from Firestore:", querySnapshot.size);
-
-        const players: Player[] = querySnapshot.docs.map((doc) => {
-            const data = doc.data() as Omit<Player, 'id'>;
-            console.log("Player data:", data); // Log each player’s data
-
-            return {
-                id: doc.id,
-                rank: data.rank,
-                name: data.name,
-                score: data.score,
-                position: data.position,
-                skills: data.skills,
-            };
-        });
-
-        return players;
-    } catch (error) {
-        console.error("Error fetching players:", error);
-        return [];
-    }
-}
 
 
