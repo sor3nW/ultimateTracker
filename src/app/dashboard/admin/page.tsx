@@ -3,6 +3,7 @@
 import PlayerList from '@/components/PlayerList';
 import { SignedIn, UserButton } from '@clerk/nextjs';
 import PlayerForm from '@/components/PlayerForm';
+import AdminSkillsUpdateForm from '@/components/AdminSkillsUpdateForm';
 export default async function Admin() {
 
     return (
@@ -16,9 +17,15 @@ export default async function Admin() {
                     </SignedIn>
                 </div>
             </div>
-            <div className='justify-end'>
-            <PlayerForm />
-            <PlayerList />
+            <div className='justify-end grid grid-cols-2'>
+                <div className='cols-span-1'>
+                    <PlayerForm />
+                    <PlayerList />
+                </div>
+                <div className='cols-span-1'>
+
+                <AdminSkillsUpdateForm />
+                </div>
             </div>
         </div>
     );
