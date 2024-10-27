@@ -6,7 +6,6 @@ import {
   collection,
   addDoc,
   getDocs,
-  doc,
   query,
   orderBy,
 } from "firebase/firestore";
@@ -14,15 +13,9 @@ import { db } from "@/lib/firebase/firebase";
 import { Player } from "@/types/types";
 import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
 
-interface DashboardContentProps {
-    players: Player[];
-  }
-
 interface Team {
   id: string;
   name: string;
-  createdBy: string;
-  createdAt: Date;
 }
 
 const DashboardContent: React.FC<DashboardContentProps> = ({ players }) =>{
@@ -49,38 +42,6 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ players }) =>{
 
     fetchTeams();
   }, []);
-
-  useEffect(() => {
-    if (selectedTeam) {
-      const fetchTeamPlayers = async () => {
-        try {
-          const playersCollectionRef = collection(
-            db,
-            "organizations",
-            selectedTeam.id,
-            "players"
-          );
-
-          // Order the players by 'rank' in ascending order
-          const playersQuery = query(
-            playersCollectionRef,
-            orderBy("rank", "asc")
-          );
-          const playerSnapshot = await getDocs(playersQuery);
-          const playerList = playerSnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...(doc.data() as Omit<Player, "id">),
-          }));
-          setTeamPlayers(playerList);
-        } catch (error) {
-          console.error("Error fetching team players:", error);
-        }
-      };
-      fetchTeamPlayers();
-    } else {
-      setTeamPlayers([]);
-    }
-  }, [selectedTeam]);
 
   const handleCreateTeam = async () => {
     if (!newTeamName.trim()) {
